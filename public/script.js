@@ -1,4 +1,9 @@
 const socket = io('/')
+var peer = new Peer(undefined, {
+    path: '/peerjs',
+    host: '/',
+    port: '3030'
+})
 
 const videoGrid = document.getElementById('video-grid');
 const myVideo = document.createElement('video');
@@ -15,14 +20,16 @@ navigator.mediaDevices.getUserMedia({
     console.log(onCancel)
 })
 
-socket.emit('join-room', ROOM_ID);
-
-socket.on('user-connected', (roomId) => {
-    connectNewUser();
+peer.on('open', id => {
+    socket.emit('join-room', ROOM_ID, id);
 })
 
-const connectNewUser = () => {
-    console.log('user has joined')
+socket.on('user-connected', (userId) => {
+    connectNewUser(userId);
+})
+
+const connectNewUser = (userId) => {
+    console.log('user has joined', userId)
 }
 
 const addVideoStream = (video, stream) => {
