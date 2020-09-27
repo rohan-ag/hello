@@ -25,7 +25,8 @@ server.listen(3030);
 
 
 socketIO.on('connection', socket => {
-    socket.on('join-room', () => {
-        console.log('Room joined')
+    socket.on('join-room', (roomId) => {
+        socket.join(roomId);
+        socket.to(roomId).broadcast.emit('user-connected');
     })
 })

@@ -15,7 +15,15 @@ navigator.mediaDevices.getUserMedia({
     console.log(onCancel)
 })
 
-socket.emit('join-room');
+socket.emit('join-room', ROOM_ID);
+
+socket.on('user-connected', (roomId) => {
+    connectNewUser();
+})
+
+const connectNewUser = () => {
+    console.log('user has joined')
+}
 
 const addVideoStream = (video, stream) => {
     video.srcObject = stream;
